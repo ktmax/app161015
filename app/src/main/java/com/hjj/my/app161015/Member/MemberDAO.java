@@ -8,13 +8,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import static com.hjj.my.app161015.util.Constants.DB_NAME;
+import static com.hjj.my.app161015.util.Constants.DB_VERSION;
+
 /**
  * Created by 1027 on 2016-10-15.
  */
 
 public class MemberDAO extends SQLiteOpenHelper {
-    public static final String DB_NAME = "hanbit.db";
-    public static final int DB_VERSION =1 ;
+    //public static final String DB_NAME = "hanbit.db";
+    //public static final int DB_VERSION =1 ;
     public static final String ID = "id";
     public static final String PW = "pw";
     public static final String NAME = "name";
@@ -27,7 +30,7 @@ public class MemberDAO extends SQLiteOpenHelper {
         //super(context,"hanbitdb3",null,1);
         super(context,DB_NAME,null,DB_VERSION);
         this.getWritableDatabase();// 입력가능한 DB로 만들어라
-        Log.d("DB가 만들어지면 이 글이 보일것임.", "성공!!");
+        Log.d("DB가 mda만들어지면 이 글이 보일것임.", "성공!!");
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -62,23 +65,27 @@ public class MemberDAO extends SQLiteOpenHelper {
         db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
                 + "values ('hjj5','1','허중재5','hjj1@gamil.com','서울','010-1234-2222','default.jpg')");
         db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
-                + "values ('hjj6','1','허중재6','hjj1@gamil.com','서울','010-1234-2222','default.jpg')");
-        db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
-                + "values ('hjj7','1','허중재7','hjj1@gamil.com','서울','010-1234-2222','default.jpg')");
-        db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
-                + "values ('hjj8','1','허중재8','hjj1@gamil.com','서울','010-1234-2222','default.jpg')");
-        db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
-                + "values ('hjj9','1','허중재9','hjj1@gamil.com','서울','010-1234-2222','default.jpg')");
-        db.execSQL("insert into member(id,pw,name,email,addr,phone,profileImg) "
                 + "values ('hjj10','1','허중재10','hjj1@gamil.com','37.5597680,126.9423080','010-5606-5101','default.jpg')");
-
-
+        db.execSQL( "create table if not exists message("
+                + "_id        INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + "receiver   text,"
+                + "content    text,"
+                + "send_date  text,"
+                + "id         text,"
+                + "FOREIGN KEY (id) REFERENCES member(Id));");
+         //w3shools 에 가면 html5및
+        db.execSQL("insert into message(receiver,content,send_date,id) "
+                + "values ('hjj2','Hi!!! Thank you ...','2016-10-30 13:17','hjj1')");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("insert into Android values(null,'android_6.0.0',1);");
-        db.execSQL("insert into Android values(null,'android_6.0.0',2);");
+        //db.execSQL("insert into Android values(null,'android_6.0.0',1);");
+        //db.execSQL("insert into Android values(null,'android_6.0.0',2);");
+       // this.onCreate(db);
+        db.execSQL("drop table if exists member;");
+        this.onCreate(db);
+        db.execSQL("drop table if exists message;");
         this.onCreate(db);
     }
 
@@ -199,21 +206,21 @@ public class MemberDAO extends SQLiteOpenHelper {
     // DML ( UPDATE)
     public void update(MemberDTO param){  // 외부에서 접근 못하게 void 로닫아준다.
         Log.i("=========DAO update : ","진입");
-        String sql = String.format("update member set ",TABLE_NAME)
+        String sql = String.format("update %s set ",TABLE_NAME)
                + String.format("%s = '%s',",PW,param.getPw())
                 + String.format("%s = '%s',",EMAIL,param.getEmail())
                 + String.format("%s = '%s',",ADDR,param.getAddr())
-                + String.format("%s = '%s',",PHOTO,param.getProfileImg())
-                + String.format("where %s = %s';",ID,param.getId());
+                + String.format("%s = '%s' ",PHOTO,param.getProfileImg())
+                + String.format(" where %s = '%s';",ID,param.getId());
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
         db.close();
     }
     // DML ( DELETE)
-    public void delete(MemberDTO param){
+    public void delete(String id){
         Log.i("=========DAO delete : ","진입");
         String sql = String.format("delete from %s ",TABLE_NAME)
-                + String.format("where %s = '%s',",ID,param.getId());
+                + String.format(" where %s = '%s' ;",ID, id);
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
         db.close();

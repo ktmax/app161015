@@ -10,14 +10,14 @@ public interface MemberService {
     // CREATE
     public void regist(MemberDTO member);   //INSERT
     // READ
-    public ArrayList<MemberDTO> getList(MemberDTO member);  //
-    public ArrayList<MemberDTO> getListByname(MemberDTO member);  //
-    public MemberDTO getOne(MemberDTO member);  //
-    public int count();  //
+    public ArrayList<MemberDTO> getList();
+    public ArrayList<MemberDTO> getListByname(MemberDTO member);
+    public MemberDTO getOne(MemberDTO member);
+    public int count();
     // UPDATE
     public void update(MemberDTO member);
 
     //DELETE
-    public void unregist(MemberDTO member);  //회원탈퇴
+    public void unregist(String id);  //회원탈퇴
 
 }

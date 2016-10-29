@@ -2,8 +2,6 @@ package com.hjj.my.app161015.Member;
 
 import android.content.Context;
 
-import com.hjj.my.app161015.util.Retval;
-
 import java.util.ArrayList;
 
 /**
@@ -23,9 +21,10 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public ArrayList<MemberDTO> getList(MemberDTO member) {
+    public ArrayList<MemberDTO> getList() {
         return dao.selectList();
     }
+
 
     @Override
     public ArrayList<MemberDTO> getListByname(MemberDTO member) {
@@ -49,8 +48,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void unregist(MemberDTO member) {
-        dao.delete(member);
+    public void unregist(String id) { dao.delete(id);
 
     }
 }
